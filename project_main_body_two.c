@@ -72,7 +72,7 @@ void ipc_recv_task_main(void *args)
 {
     int32_t status;
     char recvMsg[IPC_RPMESSAGE_MAX_MSG_SIZE+1]; /* +1 for NULL char in worst case */
-    char sendingMsg[IPC_RPMESSAGE_MAX_MSG_SIZE+1]="HI,IT WORKS";
+    char sendingMsg[IPC_RPMESSAGE_MAX_MSG_SIZE+1];
     uint16_t recvMsgSize, remoteCoreId, remoteCoreEndPt;
     RPMessage_Object *pRpmsgObj = (RPMessage_Object *)args;
 
@@ -89,6 +89,18 @@ void ipc_recv_task_main(void *args)
             SystemP_WAIT_FOREVER);
 
 
+
+        strcpy(sendingMsg,recvMsg);
+
+        //sendingMsg[12]='1';
+        if(sendingMsg[12]>='9')
+            {
+                sendingMsg[12]='1';
+            }
+            else
+            {
+                sendingMsg[12]=(int)sendingMsg[12]+1;
+            }
         /* echo the same message string as reply */
         #if 0 /* not logging this so that this does not add to the latency of message exchange */
         recvMsg[recvMsgSize] = 0; /* add a NULL char at the end of message */
